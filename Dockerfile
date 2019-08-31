@@ -1,11 +1,11 @@
 FROM ubuntu:18.04
 
-LABEL version="19.08"
-LABEL description="Building image for backend of reserve-app"
+LABEL version="19.08.02"
+LABEL description="Make username fixed"
 LABEL meintainer="east9698@gmail.com"
 
-ARG username
-ENV USERNAME=${username}
+ENV USERNAME=toyolab
+ENV PASSWORD=password
 ENV ELIXIR_VERSION=1.9.1-1
 ENV ERLANG_VERSION=1:22.0.7-1
 ENV NODEJS_VERSION=12.8.1-1nodesource1
@@ -19,12 +19,14 @@ RUN apt-get install -y curl
 RUN apt-get install -y sudo
 
 
-# 一般ユーザーアカウントを追加
+# Add general user to the system
 RUN useradd -m ${USERNAME}
-# 一般ユーザーにsudo権限を付与
+
+# Set sudo priviledge to new user
 RUN gpasswd -a ${USERNAME} sudo
-# 一般ユーザーのパスワード設定
-RUN echo "${USERNAME}:test_pass" | chpasswd
+
+# Set password for general user
+RUN echo "${USERNAME}:${PASSWORD}" | chpasswd
 
 # Create nomal user
 #RUN adduser ${USERNAME}
